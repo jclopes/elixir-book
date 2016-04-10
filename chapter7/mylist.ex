@@ -17,11 +17,14 @@ defmodule MyList do
 
   # Exercise: ListsAndRecursion-3
   def caesar([], _), do: []
-  def caesar([h|t], n) when (h + n) <= ?z, do: [h + n|caesar(t, n)]
+  def caesar(l, n) when abs(n) >= 26, do: caesar(l, rem(n, 26))
   def caesar([h|t], n) when (h + n) > ?z, do: [h + n - 26|caesar(t, n)]
+  def caesar([h|t], n) when (h + n) < ?a, do: [h + n + 26|caesar(t, n)]
+  def caesar([h|t], n), do: [h + n|caesar(t, n)]
 
   # Exercise: ListsAndRecursion-4
   def span(from, from), do: [from]
   def span(from, to) when from < to, do: [from|span(from + 1, to)]
+  def span(from, to) when from > to, do: [from|span(from - 1, to)]
 
 end
