@@ -1,4 +1,4 @@
-defmodule Mylist do
+defmodule MyList do
 
   # Exercise: ListsAndRecursion-5
   def all?([], _), do: true
@@ -22,6 +22,10 @@ defmodule Mylist do
   def _reverse([], acc), do: acc
   def _reverse([h|t], acc), do: _reverse(t, [h|acc])
 
+  def split(col, n) when n < 0 do
+    {a, b} = _split(reverse(col), abs(n), [], [])
+    {reverse(b), reverse(a)}
+  end
   def split(col, n), do: _split(col, n, [], [])
 
   def _split([], _, l, r), do: {reverse(l), r}
@@ -41,4 +45,21 @@ defmodule Mylist do
   def _flatten([h|t], acc) do
     _flatten(t, _flatten(h, acc))
   end
+
+  # Exercise: ListsAndRecursion-4 (from chapter7)
+  def span(from, from), do: [from]
+  def span(from, to) when from < to, do: [from|span(from + 1, to)]
+  def span(from, to) when from > to, do: [from|span(from - 1, to)]
+
+  # Exercise: ListsAndRecursion-7
+  def primes(n), do: for p <- span(2, n), prime?(p), do: p
+
+  def prime?(n) when n >= 0 and n < 2, do: false
+  def prime?(2), do: true
+  def prime?(n) when n > 2, do: _prime?(n, span(2, div(n, 2)))
+
+  defp _prime?(_n, []), do: true
+  defp _prime?(n, [h|_]) when rem(n, h) == 0, do: false
+  defp _prime?(n, [_|t]), do: _prime?(n, t)
+
 end
