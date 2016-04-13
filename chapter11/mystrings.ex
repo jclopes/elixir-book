@@ -47,4 +47,11 @@ defmodule MyStrings do
     String.rjust(line, div(line_size + String.length(line), 2))
   end
 
+  # Exercise: StringsAndBinaries-6
+  def capitalize_sentences(text) do
+    String.split(text, ~r"\. ")
+    |> Enum.map(&String.capitalize/1)
+    |> Enum.join(". ")
+  end
+
 end
