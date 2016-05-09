@@ -15,11 +15,13 @@ defmodule Issues.TableFormatter do
       Map.new(),
       fn(fname, acc) -> put_in(acc[fname], String.length(fname)) end
     )
-    Enum.reduce(issues, {[], init_field_widths}, &extract_fields0/2)
+    {clean_issues, field_widths} = Enum.reduce(
+      issues, {[], init_field_widths}, &extract_fields0/2
+    )
+    {Enum.reverse(clean_issues), field_widths}
   end
 
   defp extract_fields0(issue, {issues, field_widths}) do
-
     {nissue, field_widths} = Enum.reduce(
       field_widths, {Map.new(), field_widths},
       fn({fname, fwidth}, {data_map, field_widths}) ->
@@ -45,17 +47,12 @@ defmodule Issues.TableFormatter do
       fn({k, w}) -> "#{String.ljust(k, w)}" end
     )
     |> Enum.join(" | ")
-        Enum.map(
-      field_widths,
-      fn({k, w}) -> "#{String.ljust(k, w)}" end
-    )
-    |> Enum.join("-+-")
-
+    
     line = Enum.map(
       field_widths,
       fn({_, w}) -> "#{String.ljust("", w, ?-)}" end
     )
-    |> Enum.join("-|-")
+    |> Enum.join("-+-")
     [titles, line]
   end
 
